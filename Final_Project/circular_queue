@@ -69,3 +69,34 @@ void enqueue(node **rear,int data){
 	temp->next = newNode;
 	*rear = newNode;
 }
+int dequeue(node *rear){
+	int data;
+	if(!rear){
+		printf("\nNO ITEMS IN THE QUEUE\n");
+		return 0;
+	}
+	if(!rear->next){
+		data = rear->data;
+		free(rear);
+		return data;
+	}
+	node *temp = rear->next;
+	data = temp->data;
+	rear->next = temp->next;
+	free(temp);
+	return data;
+}
+
+int main(){
+    int n;
+	node *rear = createQueue();
+	display(rear,rear->next);
+	printf("Enter number to enqueue:");
+	scanf("%d",&n);
+	enqueue(&rear,n);
+	display(rear,rear->next);
+	int data = dequeue(rear);
+	printf("Delete item is: %d\n",data);
+	display(rear,rear->next);
+	return 0;
+}
