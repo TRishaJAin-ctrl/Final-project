@@ -51,3 +51,21 @@ void display(node *rear, node *front){
 		printf("%d\n",temp->data);
 	}
 }
+
+void enqueue(node **rear,int data){
+	node *newNode = (node *)malloc(sizeof(node));
+	newNode->data = data;
+	if(!(*rear)){
+		newNode->next=NULL;
+		*rear = newNode;
+		return;	
+	}
+	node *temp = *rear;
+	if(!(*rear)->next){
+		newNode->next = temp;
+	}else{
+		newNode->next = temp->next;
+	}
+	temp->next = newNode;
+	*rear = newNode;
+}
