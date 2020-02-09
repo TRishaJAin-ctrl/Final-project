@@ -82,3 +82,69 @@ struct node *DisplayPost(struct node *pstart)
 	printf("%s\n",post);
 	return pstart;
 }
+//precedence selector
+int precedence(char ch)
+{
+	if(ch == '^')
+		return (5);
+	else if(ch == '*' || ch == '/')
+		return (4);
+	else if (ch == '+' || ch == '-')
+		return (3);
+	else
+		return (2);
+}
+//infix to postfix conversion
+struct node *IntoPost(char infix[], struct node *pstart)
+{
+	int len;
+	int index=0;
+	char symbol,temp;
+	len = strlen(infix);
+	while(len > index)
+	{
+		symbol = infix[index];
+		switch(symbol)
+		{
+			case '(':	push(symbol);
+					break;
+
+			case ')':	temp = pop();
+					while(temp!='(')
+					{
+						pstart = insert(temp,pstart);
+						temp = pop();
+					}
+					break;
+			case '^':
+			case '+':
+			case '-':
+			case '*':
+			case '/':	if(top == NULL)
+					{
+						push(symbol);
+					}
+					else
+					{
+						while(top != NULL && (precedence(top->data) >= precedence(symbol)))
+						{
+							temp = pop(top);
+							pstart = insert(temp,pstart);
+						}
+						push(symbol);
+
+					}   
+					break;
+			default:	pstart = insert(symbol,pstart);
+
+		}
+		index = index+1;
+	}
+	while(top != NULL)
+	{
+		temp = pop();
+		pstart = insert(temp,pstart);
+	}
+	pstart = DisplayPost(pstart);
+	return pstart;
+} 
