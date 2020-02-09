@@ -190,3 +190,58 @@ void spush(struct Stack* stack,int op)
 { 
     stack->array[++stack->top] = op; 
 } 
+
+// The main function that returns value of a given postfix expression 
+int EvaluatePostfix(char* exp) 
+{ 
+	// Create a stack of capacity equal to expression size 
+	struct Stack* stack = createStack(strlen(exp)); 
+	// Scan all characters one by one 
+	for (int i = 0; exp[i]; ++i) 
+	{ 
+		//if the character is blank space then continue 
+        if(exp[i]==' ')
+		continue; 
+          
+    	// If the scanned character is an operand,extract the full number
+		else if (isdigit(exp[i])) 
+		{ 
+			int num=0; 
+			//extract full number 
+			while(isdigit(exp[i]))  
+			{ 
+				num=num*10 + (int)(exp[i]-'0'); 
+				i++; 
+		 	} 
+			i--; 
+			//push the element in the stack 
+			spush(stack,num); 
+		}
+		// If the scanned character is an operator,pop two elements from stack apply the operator 
+		else
+		{ 
+			int val1 = spop(stack); 
+			int val2 = spop(stack); 
+			switch (exp[i]) 
+			{ 
+				case '+': spush(stack, val2 + val1); break; 
+				case '-': spush(stack, val2 - val1); break; 
+				case '*': spush(stack, val2 * val1); break; 
+				case '/': spush(stack, val2/val1); break; 
+				case '^': spush(stack, pow(val2,val1)); break;  
+			} 
+		} 
+	} 	
+	return spop(stack); 
+}  
+int main()
+{
+	char infix[50];
+	struct node *pstart = NULL;
+	printf("Enter infix expression: ");
+	scanf("%[^\n]c",infix);    
+	printf("Equivalent postfix expression is---> ");
+	pstart = IntoPost(infix,pstart);
+	printf ("%d\n", EvaluatePostfix(post));
+	return 0;
+}
