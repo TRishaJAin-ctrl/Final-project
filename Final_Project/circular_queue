@@ -34,3 +34,20 @@ node *createQueue(){
 	}
 	return rear;
 }
+void display(node *rear, node *front){
+	if(!rear){
+		printf("\nNOTHING TO DISPLAY\n");
+		return;
+	}
+	node *temp = front;
+	if(!rear->next){
+		printf("%d\n",rear->data);
+		return;
+	}
+	if(temp!=rear){
+		printf("%d ",temp->data);
+		display(rear, temp->next);
+	}else{
+		printf("%d\n",temp->data);
+	}
+}
